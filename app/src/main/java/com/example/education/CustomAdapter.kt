@@ -3,15 +3,15 @@ package com.example.education
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.education.data.Crypto
+import com.example.education.data.search.Coins
 import com.example.education.databinding.ItemLayoutBinding
 
-class CustomAdapter(private var list: List<Crypto>) :
+class CustomAdapter(private var list: ArrayList<Coins>) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
     inner class ViewHolder(private var binding: ItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Crypto) {
+        fun bind(item: Coins) {
             binding.symbol.text = item.name
         }
     }
@@ -30,10 +30,4 @@ class CustomAdapter(private var list: List<Crypto>) :
         return list.size
     }
 
-    fun submitList(newList: List<Crypto>?) {
-        if (list == newList) return
-        if (newList != null) {
-            list = newList
-        }
-    }
 }

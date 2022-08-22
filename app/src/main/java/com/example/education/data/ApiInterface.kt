@@ -1,13 +1,13 @@
 package com.example.education.data
 
-import io.reactivex.Observable
+import com.example.education.data.search.SearchResponse
+import io.reactivex.rxjava3.core.Observable
 import retrofit2.http.GET
-import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiInterface {
 
-    @GET("markets")
+    @GET("coins/markets")
     fun getCryptos(
         @Query("vs_currency") currency: String,
         @Query("order") order: String,
@@ -15,4 +15,9 @@ interface ApiInterface {
         @Query("page") page: Int,
         @Query("sparkline") sparkline: Boolean
     ): Observable<List<Crypto>>
+
+    @GET("search")
+    fun searchCrypto(
+        @Query("query") request: String
+    ): Observable<SearchResponse>
 }
