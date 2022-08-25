@@ -7,7 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.education.data.search.Coins
+import com.example.education.data.search.SearchResponse
 import com.example.education.databinding.FragmentListBinding
 import retrofit2.HttpException
 
@@ -44,16 +44,16 @@ class ListFragment : Fragment() {
 
     private fun onButtonClicked() {
         binding?.progressBar?.visibility = View.VISIBLE
-        useMerge()
-        sendRequest()
+        mergeTwoCryptos("ethereum", "bitcoin")
+        getCryptosInfo()
     }
 
-    private fun sendRequest() {
-        viewModel?.sendRequest()?.subscribe({ setList(it.coins) }, { errorHandle(it) })
+    private fun getCryptosInfo() {
+        viewModel?.getCryptoInfo()?.subscribe({ setCryptosInfo(it) }, { errorHandle(it) })
     }
 
-    private fun useMerge() {
-        viewModel?.merge()?.subscribe({
+    private fun mergeTwoCryptos(firstCrypto: String, secondCrypto: String) {
+        viewModel?.mergeTwoSearchResponses(firstCrypto, secondCrypto)?.subscribe({
             Log.d("ADV_MERGE", it.coins.toString())
         }, {
             errorHandle(it)
@@ -61,8 +61,8 @@ class ListFragment : Fragment() {
         })
     }
 
-    private fun setList(list: ArrayList<Coins>) = with(binding) {
-        adapter = CustomAdapter(list)
+    private fun setCryptosInfo(listInfo: List<SearchResponse>) = with(binding) {
+        adapter = CustomAdapter(listInfo)
         binding?.progressBar?.visibility = View.GONE
         binding?.rwList?.adapter = adapter
         binding?.rwList?.visibility = View.VISIBLE

@@ -12,20 +12,26 @@ class ListViewModel : ViewModel() {
 
     private val repo = CryptoRepository()
 
-    fun sendRequest(): Single<SearchResponse> {
+    fun getCryptoInfo(): Single<List<SearchResponse>> {
         return repo.getCryptos()
+            .flattenAsObservable { it }
             .flatMap {
-                repo.search(it[0].name)
+                repo.search(it.name).toObservable()
             }
+            .toList()
             .observeOn(AndroidSchedulers.mainThread())
     }
 
-    fun merge(): Observable<SearchResponse> {
-        val firstObservable = repo.search("ethereum")
-        val secondObservable = repo.search("bitcoin")
+    fun mergeTwoSearchResponses(
+        firstRequest: String,
+        secondRequest: String
+    ): Observable<SearchResponse> {
+        val firstResponse = repo.search(firstRequest)
+        val secondResponse = repo.search(secondRequest)
 
-        return firstObservable.mergeWith(secondObservable)
+        return firstResponse.mergeWith(secondResponse)
+            .toObservable()
             .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread()).toObservable()
+            .observeOn(AndroidSchedulers.mainThread())
     }
 }
