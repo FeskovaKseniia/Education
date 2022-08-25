@@ -3,16 +3,16 @@ package com.example.education
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.education.data.search.Coins
+import com.example.education.data.search.SearchResponse
 import com.example.education.databinding.ItemLayoutBinding
 
-class CustomAdapter(private var list: ArrayList<Coins>) :
+class CustomAdapter(private var list: List<SearchResponse>) :
     RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
 
     inner class ViewHolder(private var binding: ItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(item: Coins) {
-            binding.symbol.text = item.name
+        fun bind(item: SearchResponse) {
+            binding.symbol.text = item.coins[0].name
         }
     }
 

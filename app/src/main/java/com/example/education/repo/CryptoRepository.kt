@@ -11,7 +11,7 @@ class CryptoRepository {
     private val api: ApiInterface = RetrofitClient.getClient()
 
     fun getCryptos(): Single<List<Crypto>> {
-        return api.getCryptos("usd", "market_cap_desc", 100, 1, false)
+        return api.getCryptos("usd", "market_cap_desc", 6, 1, false)
             .subscribeOn(Schedulers.io())
     }
 
