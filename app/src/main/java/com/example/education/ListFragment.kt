@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.education.data.search.SearchResponse
 import com.example.education.databinding.FragmentListBinding
-import io.reactivex.rxjava3.disposables.Disposable
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import retrofit2.HttpException
 
 class ListFragment : Fragment() {
@@ -17,9 +17,7 @@ class ListFragment : Fragment() {
     private var binding: FragmentListBinding? = null
     private var adapter: CustomAdapter? = null
     private var viewModel: ListViewModel? = null
-    private var subscription: Disposable? = null
-    private var subscriptionLog: Disposable? = null
-
+    private var compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -46,20 +44,16 @@ class ListFragment : Fragment() {
                 it.visibility = View.GONE
             }
             timerBtn.setOnClickListener {
-                viewModel?.let {
-                    it.startTimer()
-                    subscription = it.timerSubject.subscribe(
+                viewModel?.let { viewModel ->
+                    compositeDisposable.add(viewModel.timerSubject.subscribe(
                         { time -> timer.text = time },
                         { error -> errorHandle(error) }
-                    )
-                    subscriptionLog = it.timerSubject.subscribe(
-                        { time -> Log.d("TIMER", time) },
-                        { error -> errorHandle(error) }
-                    )
+                    ))
+                    viewModel.startTimer()
                 }
             }
             unsubscribeBtn.setOnClickListener {
-                subscription?.dispose()
+                compositeDisposable.dispose()
             }
         }
     }
