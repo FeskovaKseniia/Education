@@ -2,6 +2,7 @@ package com.example.education
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import com.example.education.data.Result
 import com.example.education.data.search.SearchResponse
 import com.example.education.repo.CryptoRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -17,6 +18,7 @@ class ListViewModel : ViewModel() {
     private val repo = CryptoRepository()
 
     val timerSubject: PublishSubject<String> = PublishSubject.create()
+    val requestWithError: PublishSubject<Result> = PublishSubject.create()
 
     fun getCryptoInfo(): Single<List<SearchResponse>> {
         return repo.getCryptos()
@@ -43,15 +45,43 @@ class ListViewModel : ViewModel() {
 
     fun startTimer() {
         Observable.interval(1000L, TimeUnit.MILLISECONDS).timeInterval()
-            .map (::timerMapper)
+            .map(::timerMapper)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(timerSubject)
     }
 
-    private fun timerMapper(time: Timed<Long>): String {
-        val time = time.value().toString()
+    private fun timerMapper(timed: Timed<Long>): String {
+        val time = timed.value().toString()
         Log.d("TIMER", time)
         return time
+    }
+
+    fun startRequestWithError() {
+        repo.search(WRONG_REQUEST)
+            .doOnError { error ->
+                requestWithError.onNext(Result.Error(error.localizedMessage))
+            }
+            .doOnSuccess { response ->
+                if (response.coins.isEmpty()) {
+                    requestWithError.onNext(Result.Error("is empty response"))
+                    requestWithError.onComplete()
+                } else {
+                    requestWithError.onNext(Result.Success(response))
+                }
+            }
+            .onErrorReturn {
+                Log.e("Wrong_request", it.localizedMessage ?: "some sort of error")
+                SearchResponse()
+            }
+            .subscribeOn(Schedulers.io())
+            .toObservable()
+            .publish()
+            .connect()
+    }
+
+    companion object {
+        private const val WRONG_REQUEST = "betcoin"
+        private const val CORRECT_REQUEST = "bitcoin"
     }
 }
