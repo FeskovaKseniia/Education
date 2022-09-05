@@ -18,7 +18,6 @@ class ListViewModel : ViewModel() {
     private val repo = CryptoRepository()
 
     val timerSubject: PublishSubject<String> = PublishSubject.create()
-    val requestWithError: PublishSubject<Result> = PublishSubject.create()
 
     fun getCryptoInfo(): Single<List<SearchResponse>> {
         return repo.getCryptos()
@@ -57,27 +56,22 @@ class ListViewModel : ViewModel() {
         return time
     }
 
-    fun startRequestWithError() {
-        repo.search(WRONG_REQUEST)
-            .doOnError { error ->
-                requestWithError.onNext(Result.Error(error.localizedMessage))
-            }
-            .doOnSuccess { response ->
-                if (response.coins.isEmpty()) {
-                    requestWithError.onNext(Result.Error("is empty response"))
-                    requestWithError.onComplete()
+    fun startRequestWithError(): Observable<Result> {
+        return repo.search(WRONG_REQUEST)
+            .toObservable()
+            .map {
+                if (it.coins.isEmpty()) {
+                    Result.Error("is empty response")
                 } else {
-                    requestWithError.onNext(Result.Success(response))
+                    Result.Success(it)
                 }
             }
+            .doOnError { error -> Result.Error(error.localizedMessage) }
             .onErrorReturn {
                 Log.e("Wrong_request", it.localizedMessage ?: "some sort of error")
-                SearchResponse()
+                Result.Error(it.localizedMessage)
             }
             .subscribeOn(Schedulers.io())
-            .toObservable()
-            .publish()
-            .connect()
     }
 
     companion object {

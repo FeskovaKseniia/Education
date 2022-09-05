@@ -59,17 +59,22 @@ class ListFragment : Fragment() {
                 compositeDisposable.dispose()
             }
             errorBtn.setOnClickListener {
-                viewModel?.requestWithError?.observeOn(AndroidSchedulers.mainThread())?.subscribe { result ->
-                    when (result) {
-                        is Result.Error -> Toast.makeText(context, result.msg, Toast.LENGTH_LONG).show()
-                        is Result.Success -> Toast.makeText(
-                            context,
-                            result.response.coins[0].name,
-                            Toast.LENGTH_LONG
-                        ).show()
+                viewModel?.startRequestWithError()?.observeOn(AndroidSchedulers.mainThread())
+                    ?.subscribe { result ->
+                        when (result) {
+                            is Result.Error -> Toast.makeText(
+                                context,
+                                result.msg,
+                                Toast.LENGTH_LONG
+                            ).show()
+                            is Result.Success -> Toast.makeText(
+                                context,
+                                result.response.coins[0].name,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
-                }
-                viewModel?.startRequestWithError()
+
             }
         }
     }
