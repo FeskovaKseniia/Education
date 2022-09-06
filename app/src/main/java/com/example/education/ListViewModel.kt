@@ -11,6 +11,7 @@ import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.schedulers.Timed
 import io.reactivex.rxjava3.subjects.PublishSubject
+import java.io.IOException
 import java.util.concurrent.*
 
 class ListViewModel : ViewModel() {
@@ -63,14 +64,25 @@ class ListViewModel : ViewModel() {
                 SearchResult.Success(it.coins.firstOrNull()?.name ?: "No name, empty list")
             }
             .doOnError {
-                Log.e("Wrong_request", it.localizedMessage ?: "some sort of error")
+                Log.e("Wrong_request", "some sort of error doOnError " + it.localizedMessage)
                 SearchResult.Error(it)
             }
+            .retryWhen {
+                it.map { error ->
+                    Log.e("Wrong_request", "try again " + error.localizedMessage)
+                    if (error is IOException) {
+                        return@map Observable.just(null)
+                    }
+                    return@map Observable.error(error)
+                }
+            }
             .onErrorReturn {
-                Log.e("Wrong_request", it.localizedMessage ?: "some sort of error")
+                Log.e("Wrong_request", "some sort of error onErrorReturn " + it.localizedMessage)
                 SearchResult.Error(it)
             }
             .subscribeOn(Schedulers.io())
+
+
     }
 
     companion object {

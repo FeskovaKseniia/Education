@@ -74,7 +74,6 @@ class ListFragment : Fragment() {
                             ).show()
                         }
                     }
-
             }
         }
     }
