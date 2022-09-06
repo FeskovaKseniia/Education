@@ -8,7 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.education.data.Result
+import com.example.education.data.SearchResult
 import com.example.education.data.search.SearchResponse
 import com.example.education.databinding.FragmentListBinding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -62,14 +62,14 @@ class ListFragment : Fragment() {
                 viewModel?.startRequestWithError()?.observeOn(AndroidSchedulers.mainThread())
                     ?.subscribe { result ->
                         when (result) {
-                            is Result.Error -> Toast.makeText(
+                            is SearchResult.Error -> Toast.makeText(
                                 context,
-                                result.msg,
+                                result.throwable?.localizedMessage,
                                 Toast.LENGTH_LONG
                             ).show()
-                            is Result.Success -> Toast.makeText(
+                            is SearchResult.Success -> Toast.makeText(
                                 context,
-                                result.response.coins[0].name,
+                                result.name,
                                 Toast.LENGTH_LONG
                             ).show()
                         }

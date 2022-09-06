@@ -2,7 +2,7 @@ package com.example.education
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.education.data.Result
+import com.example.education.data.SearchResult
 import com.example.education.data.search.SearchResponse
 import com.example.education.repo.CryptoRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
@@ -56,20 +56,19 @@ class ListViewModel : ViewModel() {
         return time
     }
 
-    fun startRequestWithError(): Observable<Result> {
+    fun startRequestWithError(): Observable<SearchResult> {
         return repo.search(WRONG_REQUEST)
             .toObservable()
-            .map {
-                if (it.coins.isEmpty()) {
-                    Result.Error("is empty response")
-                } else {
-                    Result.Success(it)
-                }
+            .map<SearchResult> {
+                SearchResult.Success(it.coins.firstOrNull()?.name ?: "No name, empty list")
             }
-            .doOnError { error -> Result.Error(error.localizedMessage) }
+            .doOnError {
+                Log.e("Wrong_request", it.localizedMessage ?: "some sort of error")
+                SearchResult.Error(it)
+            }
             .onErrorReturn {
                 Log.e("Wrong_request", it.localizedMessage ?: "some sort of error")
-                Result.Error(it.localizedMessage)
+                SearchResult.Error(it)
             }
             .subscribeOn(Schedulers.io())
     }
