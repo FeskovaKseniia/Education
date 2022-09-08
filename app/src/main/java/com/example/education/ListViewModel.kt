@@ -43,7 +43,7 @@ class ListViewModel : ViewModel() {
 
     fun startTimer() {
         Observable.interval(1000L, TimeUnit.MILLISECONDS).timeInterval()
-            .map (::timerMapper)
+            .map(::timerMapper)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe(timerSubject)
@@ -53,5 +53,10 @@ class ListViewModel : ViewModel() {
         val time = time.value().toString()
         Log.d("TIMER", time)
         return time
+    }
+
+    fun sendRequest(request: String): Observable<SearchResponse> {
+        Log.d("SWITCH", request)
+        return repo.search(request).toObservable()
     }
 }

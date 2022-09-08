@@ -9,7 +9,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.education.data.search.SearchResponse
 import com.example.education.databinding.FragmentListBinding
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.schedulers.Schedulers
 import retrofit2.HttpException
 
 class ListFragment : Fragment() {
@@ -29,6 +31,7 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        bindSearch()
         initView()
     }
 
@@ -55,6 +58,25 @@ class ListFragment : Fragment() {
             unsubscribeBtn.setOnClickListener {
                 compositeDisposable.dispose()
             }
+        }
+    }
+
+    private fun bindSearch() {
+        binding?.searchView?.let {
+            RxSearchObservable.fromView(it)
+                .switchMap { viewModel?.sendRequest(it) }
+                .map {
+                    it.coins[0].name ?: "No result"
+                }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ result ->
+                binding?.switchResult?.text = result
+                Log.d("SWITCH_RES", result)
+            }, {
+                binding?.switchResult?.text = it.message
+                Log.d("SWITCH_RES", "No result")
+            })
         }
     }
 

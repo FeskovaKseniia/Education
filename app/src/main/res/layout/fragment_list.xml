@@ -12,11 +12,19 @@
         android:gravity="center"
         android:orientation="vertical">
 
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/switchResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Result" />
+
+
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_marginTop="32dp"
             android:text="Download" />
 
         <com.google.android.material.textview.MaterialTextView
@@ -66,6 +74,13 @@
             android:layout_gravity="center"
             android:visibility="gone"
             app:indicatorColor="@color/black" />
+
+        <SearchView
+            android:id="@+id/searchView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:queryHint="Input" />
 
     </androidx.appcompat.widget.LinearLayoutCompat>
 
