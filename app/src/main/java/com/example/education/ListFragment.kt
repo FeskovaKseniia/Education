@@ -7,9 +7,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.example.education.data.search.SearchResponse
 import com.example.education.databinding.FragmentListBinding
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import kotlinx.coroutines.launch
 import retrofit2.HttpException
 
 class ListFragment : Fragment() {
@@ -41,7 +43,6 @@ class ListFragment : Fragment() {
         this?.let {
             button.setOnClickListener {
                 onButtonClicked()
-                it.visibility = View.GONE
             }
             timerBtn.setOnClickListener {
                 viewModel?.let { viewModel ->
@@ -55,31 +56,42 @@ class ListFragment : Fragment() {
             unsubscribeBtn.setOnClickListener {
                 compositeDisposable.dispose()
             }
+            viewModel?.loading?.doOnNext {
+                if (it) {
+                    binding?.progressBar?.visibility = View.VISIBLE
+                } else {
+                    binding?.progressBar?.visibility = View.GONE
+                }
+            }
+            viewModel?.error?.doOnNext {
+                binding?.error?.text = it
+                if (it.isNotEmpty()) {
+                    binding?.error?.visibility = View.VISIBLE
+                } else binding?.error?.visibility = View.GONE
+            }
         }
     }
 
     private fun onButtonClicked() {
-        binding?.progressBar?.visibility = View.VISIBLE
-        mergeTwoCryptos("ethereum", "bitcoin")
         getCryptosInfo()
     }
 
     private fun getCryptosInfo() {
-        viewModel?.getCryptoInfo()?.subscribe({ setCryptosInfo(it) }, { errorHandle(it) })
-    }
-
-    private fun mergeTwoCryptos(firstCrypto: String, secondCrypto: String) {
-        viewModel?.mergeTwoSearchResponses(firstCrypto, secondCrypto)?.subscribe({
-            Log.d("ADV_MERGE", it.coins.toString())
-        }, {
-            errorHandle(it)
-            Log.e("ADV_MERGE", it.localizedMessage ?: it.toString())
-        })
+        lifecycleScope.launch {
+            try {
+                binding?.progressBar?.visibility = View.VISIBLE
+                val list = viewModel?.getCryptoInfo() ?: emptyList()
+                setCryptosInfo(list)
+            } catch (e: HttpException) {
+                Log.d("COROUTINES", "getCryptos from fragment ${e.localizedMessage}")
+            } finally {
+                binding?.progressBar?.visibility = View.GONE
+            }
+        }
     }
 
     private fun setCryptosInfo(listInfo: List<SearchResponse>) = with(binding) {
         adapter = CustomAdapter(listInfo)
-        binding?.progressBar?.visibility = View.GONE
         binding?.rwList?.adapter = adapter
         binding?.rwList?.visibility = View.VISIBLE
     }
