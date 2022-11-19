@@ -67,6 +67,13 @@
             android:visibility="gone"
             app:indicatorColor="@color/black" />
 
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/errorBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="error"/>
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 
 </FrameLayout>
