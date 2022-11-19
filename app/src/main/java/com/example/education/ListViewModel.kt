@@ -107,8 +107,8 @@ class ListViewModel : ViewModel() {
     }
 
     private fun timerMapper(time: Timed<Long>): String {
-        val time = time.value().toString()
-        Log.d("TIMER", time)
-        return time
+        val result = time.value().toString()
+        Log.d("TIMER", result)
+        return result
     }
 }
