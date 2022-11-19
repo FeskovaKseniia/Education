@@ -64,7 +64,7 @@ class ListViewModel : ViewModel() {
             }
             .doOnSuccess { response ->
                 if (response.coins.isEmpty()) {
-                    requestWithError.onNext(Result.Error("is empty response"))
+                    requestWithError.onNext(Result.Error("is empty response error"))
                     requestWithError.onComplete()
                 } else {
                     requestWithError.onNext(Result.Success(response))
