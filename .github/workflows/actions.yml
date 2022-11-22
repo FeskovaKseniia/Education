@@ -1,6 +1,10 @@
 name: Actions Workflow
 
-on: [push]
+on:
+  schedule:
+    - cron: "0 12 * * *"
+  pull_request:
+    types: [closed, opened]
 
 jobs:
   run-github-actions:
