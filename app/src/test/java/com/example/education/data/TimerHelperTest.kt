@@ -1,7 +1,7 @@
 package com.example.education.data
 
 import io.reactivex.rxjava3.schedulers.Timed
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.util.concurrent.*
 
