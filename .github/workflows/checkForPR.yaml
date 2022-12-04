@@ -1,7 +1,7 @@
 name: For develop
 on:
     pull_request:
-      branches: [develop]
+      branches: [develop,master]
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -14,7 +14,6 @@ jobs:
               # Execute unit tests
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
-
       - name: Android Test Report
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
