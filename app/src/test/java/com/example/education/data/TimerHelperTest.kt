@@ -11,7 +11,7 @@ internal class TimerHelperTest {
 
     @Test
     fun testMapping() {
-        val expected = "1000"
+        val expected = "1500"
         assertEquals(expected, timer.timerMapper(timed = Timed(1000L,1000L, TimeUnit.MILLISECONDS)))
     }
 }
