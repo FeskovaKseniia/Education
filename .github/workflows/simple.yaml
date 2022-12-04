@@ -1,26 +1,18 @@
-name: Shell Commands
-on: [push]
+name: For develop
+  on:
+    pull_request:
+      branches: [develop]
 jobs:
-  run-shell-command:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: output the string
-        run: echo "Hello world"
-      - name: set up multiline script
-        run: |
-          node -v
-          npm -v
-      - name: python commands
-        run: |
-          import platform
-          print(platform.processor())
-        shell: python
-  run-windows-command:
-    runs-on: windows-latest
-    needs: ['run-shell-command']
-    steps:
-      - name: directory powershell
-        run: Get-Location
-      - name: directory bash
-        run: pwd
-        shell: bash
+      - uses: actions/checkout@v2
+      - name: use nodeJS
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12.x"
+      - run: npm ci
+      - run: npm run format:check
+      - run: npm test -- --coverage
+        env:
+          CI: true
