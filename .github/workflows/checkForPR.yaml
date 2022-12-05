@@ -17,7 +17,7 @@ jobs:
       - name: Android Test Report
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
-      - nam: Build
+      - name: Build
         run: ./gradlew app:assembleDebug
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
