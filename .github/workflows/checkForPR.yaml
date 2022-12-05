@@ -19,6 +19,7 @@ jobs:
       - name: publish dev apk to App Center
         run: appcenter distribute release
           --group Collaborators
+          --file app/build/outputs/apk/debug
           --app FeskovaKseniia/Education-App
           --token b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad
           --quiet
