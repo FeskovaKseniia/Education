@@ -40,14 +40,14 @@ jobs:
           token: FIREBASE_TOKEN
           groups: testers
           file: app/build/outputs/apk/debug/app-debug.apk
-      - name: Download Artifact
-        uses: actions/download-artifact@master
-        with:
-          name: build
-          path: app/build/outputs/apk/debug/app-debug.apk
-      - name: Deploy to Firebase
-        uses: w9jds/firebase-action@master
-        with:
-          args: deploy --only hosting
+#      - name: Download Artifact
+#        uses: actions/download-artifact@master
+#        with:
+#          name: build
+#          path: app/build/outputs/apk/debug/app-debug.apk
+#      - name: Deploy to Firebase
+#        uses: w9jds/firebase-action@master
+#        with:
+#          args: deploy --only hosting
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
