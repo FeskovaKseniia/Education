@@ -27,7 +27,7 @@ jobs:
           --group Collaborators 
           --file app/build/outputs/apk/debug/app-debug.apk 
           --app FeskovaKseniia/Education-App 
-          --token b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad 
+          --token d3f0ba3e-1fb0-4205-a06d-b26c50975b9f 
           --quiet
 #        run: npm install -g appcenter-cli appcenter distribute release --app "Education-App" --file app/build/outputs/apk/debug/app-debug.apk --token "b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad" --group "Collaborators"
 
