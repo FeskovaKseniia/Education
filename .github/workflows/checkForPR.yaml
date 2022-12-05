@@ -36,10 +36,10 @@ jobs:
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1.2.2
         with:
-        appId: '1:1052592334714:android:9acfb57609e9ac4292d8c3'
-        token: FIREBASE_TOKEN
-        groups: testers
-        file: app/build/outputs/apk/debug/app-debug.apk
+          appId: '1:1052592334714:android:9acfb57609e9ac4292d8c3'
+          token: FIREBASE_TOKEN
+          groups: testers
+          file: app/build/outputs/apk/debug/app-debug.apk
       - name: Download Artifact
         uses: actions/download-artifact@master
         with:
