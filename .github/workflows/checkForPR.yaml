@@ -19,8 +19,8 @@ jobs:
       - name: publish dev apk to App Center
         run: appcenter distribute release
           --group Collaborators
-          --file app/build/outputs/apk/debug
-          --app FeskovaKseniia/Education-App
+          --file app/build/outputs/apk/debug/app-debug.apk
+          --app k.feskova-itransition.com/Education-App
           --token 0a46ed2fe4c21ccbd72c8df4b69526589e4ab3f9
           --quiet
 #      - name: Log in to App Center

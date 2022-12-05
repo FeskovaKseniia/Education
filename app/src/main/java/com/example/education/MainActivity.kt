@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCenter.start(
-            application, key,
+            application, hey,
             Analytics::class.java, Crashes::class.java
         )
         binding = ActivityMainBinding.inflate(layoutInflater)
