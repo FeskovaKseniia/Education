@@ -19,11 +19,11 @@ jobs:
       - name: List of apps
         run: appcenter apps list --token ${{ secrets.APP_CENTER_TOKEN }}
       - name: publish dev apk to App Center
-        run: appcenter distribute release --group Collaborators 
+        run: appcenter distribute release --group Testers 
           --file app/build/outputs/apk/debug/app-debug.apk 
           --app FeskovaKseniia/Another
           --token ${{ secrets.APP_CENTER_TOKEN }}
-          --quiet
+          --silent
 
 #        run: appcenter distribute release --app FeskovaKseniia/Option
 #          --file app/build/outputs/apk/debug/app-debug.apk
