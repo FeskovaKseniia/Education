@@ -31,10 +31,8 @@ jobs:
 #          --quiet
       - name: Install App Center Cli
         run: sudo npm install -g appcenter-cli --unsafe-perm
-
       -name: Log in to App Center
        run: appcenter login -u 18xyzKsu69 --token b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad
-
       -name: Upload artefact to App Center
         run: appcenter distribute release -g "Collaborators" -f "app/build/outputs/apk/debug/app-debug.apk"
 #        run: npm install -g appcenter-cli appcenter distribute release --app "Education-App" --file app/build/outputs/apk/debug/app-debug.apk --token "b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad" --group "Collaborators"
