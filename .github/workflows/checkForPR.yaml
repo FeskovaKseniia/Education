@@ -21,7 +21,7 @@ jobs:
           --group Collaborators
           --file app/build/outputs/apk/debug
           --app FeskovaKseniia/Education-App
-          --token 4bf9ad9c63201923311c406891e17fceb3bca23a
+          --token d3f0ba3e-1fb0-4205-a06d-b26c50975b9f
           --quiet
 #      - name: Log in to App Center
 #        run: appcenter login -u 18xyzKsu69 --token d3f0ba3e-1fb0-4205-a06d-b26c50975b9f
