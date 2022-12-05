@@ -18,8 +18,8 @@ jobs:
         run: ./gradlew :app:assembleDebug
       - name: Delivery to AppCenter
        - uses: actions/setup-node@v2
-           with:
-             node-version: '14.x'
+         with:
+           node-version: '14.x'
        - run: npm install
       - name: publish dev apk to App Center
         run: npm install -g appcenter-cliappcenter distribute release --app Education-App --file app/build/outputs/apk/debug/app-debug.apk --group "Collaborators"
