@@ -16,6 +16,8 @@ jobs:
       - run: npm install
       - name: Install App Center Cli
         run: sudo npm install -g appcenter-cli --unsafe-perm
+      - name: List of apps
+        run: appcenter apps list --token ${{ secrets.APP_CENTER_TOKEN }}
       - name: publish dev apk to App Center
         run: appcenter distribute release --group Collaborators 
           --file app/build/outputs/apk/debug/app-debug.apk 
