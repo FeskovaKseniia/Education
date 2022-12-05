@@ -2,10 +2,13 @@ package com.example.education
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import com.example.education.databinding.ActivityMainBinding
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -13,11 +16,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        AppCenter.start(
+            application, hey,
+            Analytics::class.java, Crashes::class.java
+        )
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         supportFragmentManager.commit {
             setReorderingAllowed(true)
             add<ListFragment>(R.id.fragment)
         }
+    }
+
+    companion object {
+        private const val hey = "d3f0ba3e-1fb0-4205-a06d-b26c50975b9f"
     }
 }

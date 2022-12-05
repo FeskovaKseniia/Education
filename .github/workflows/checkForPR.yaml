@@ -14,6 +14,18 @@ jobs:
               # Execute unit tests
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
-      - name: Android Test Report
-        uses: asadmansr/android-test-report-action@v1.2.0
-        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
+      - name: Build Apk
+        run: ./gradlew :app:assembleDebug
+      - name: Delivery to AppCenter
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+          cache: npm
+          cache-dependency-path: '**/package-lock.json'
+
+      - run: npm install -g appcenter-cli
+
+      - name: publish dev apk to App Center
+        run: appcenter distribute release --app Education-App
+        --file app/build/outputs/apk/debug/app-debug.apk
+        --token "b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad"
