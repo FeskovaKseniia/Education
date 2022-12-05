@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCenter.start(
-            application, hey,
+            application, key,
             Analytics::class.java, Crashes::class.java
         )
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -30,5 +30,6 @@ class MainActivity : AppCompatActivity() {
 
     companion object {
         private const val hey = "d3f0ba3e-1fb0-4205-a06d-b26c50975b9f"
+        private const val key = "8ab8381b-c56f-44d1-afde-219039ef7d2c"
     }
 }
