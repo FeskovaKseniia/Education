@@ -1,5 +1,7 @@
 {
   "projects": {
-    "default": "education-2b3ac"
-  }
+    "develop": "education-2b3ac"
+  },
+  "targets": {},
+  "etags": {}
 }
