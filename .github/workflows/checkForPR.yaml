@@ -17,9 +17,12 @@ jobs:
       - name: Install App Center Cli
         run: sudo npm install -g appcenter-cli --unsafe-perm
       - name: publish dev apk to App Center
-        run: appcenter distribute release --app FeskovaKseniia/apps/Option
-          --file app/build/outputs/apk/debug/app-debug.apk
-          --token 5f8574d1ff650a93cd68969193bec3b97ec6be65 --group Collaborators
+#        run: appcenter distribute release --app FeskovaKseniia/Option
+#          --file app/build/outputs/apk/debug/app-debug.apk
+#          --token 5f8574d1ff650a93cd68969193bec3b97ec6be65 --group Collaborators
+        run: appcenter login --token 5f8574d1ff650a93cd68969193bec3b97ec6be65
+      - run: appcenter distribute releases add-destination -d Collaborators -t group -r 11 -a FeskovaKseniia/Option
+
 #        run: appcenter distribute release
 #          --group Collaborators
 #          --file app/build/outputs/apk/debug/app-debug.apk
