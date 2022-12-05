@@ -1,19 +1,66 @@
 name: For develop
 on:
-    pull_request:
-      branches: [develop,master]
+  pull_request:
+    branches: [ develop,master ]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Configure JDK
-        uses: actions/setup-java@v1
+      - name: Build Apk
+        run: ./gradlew :app:assembleDebug
+      - name: Delivery to AppCenter
+        uses: actions/setup-node@v2
         with:
-          java-version: 11
-              # Execute unit tests
-      - name: Unit Test
-        run: ./gradlew testDebugUnitTest
-      - name: Android Test Report
-        uses: asadmansr/android-test-report-action@v1.2.0
-        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
+          node-version: '14.x'
+      - run: npm install
+      - name: Install App Center Cli
+        run: sudo npm install -g appcenter-cli --unsafe-perm
+      - name: List of apps
+        run: appcenter apps list --token ${{ secrets.APP_CENTER_TOKEN }}
+      - name: publish dev apk to App Center
+        run: appcenter distribute release --group Testers 
+          --file app/build/outputs/apk/debug/app-debug.apk 
+          --app FeskovaKseniia/Another
+          --token ${{ secrets.APP_CENTER_TOKEN }}
+          --silent
+
+#        run: appcenter distribute release --app FeskovaKseniia/Option
+#          --file app/build/outputs/apk/debug/app-debug.apk
+#          --token 5f8574d1ff650a93cd68969193bec3b97ec6be65 --group Collaborators
+#        run: appcenter distribute release
+#          --group Collaborators
+#          --file app/build/outputs/apk/debug/app-debug.apk
+#          --app FeskovaKseniia/Option
+#          --token 0a46ed2fe4c21ccbd72c8df4b69526589e4ab3f9
+#          --quiet
+
+#      - name: Log in to App Center
+#        run: appcenter login -u 18xyzKsu69 --token d3f0ba3e-1fb0-4205-a06d-b26c50975b9f
+#      - name: Upload artefact to App Center
+#        run: appcenter distribute release -g "Collaborators" -f "app/build/outputs/apk/debug/app-debug.apk"
+#      - name: Configure JDK
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#          # Execute unit tests
+#      - name: Unit Test
+#        run: ./gradlew testDebugUnitTest
+
+#      - run: npm install -g appcenter-cli
+#      - name: publish dev apk to App Center
+#        run: appcenter distribute release
+#          --group Collaborators
+#          --file app/build/outputs/apk/debug/app-debug.apk
+#          --app FeskovaKseniia/Education-App
+#          --token d3f0ba3e-1fb0-4205-a06d-b26c50975b9f
+#          --quiet
+
+#        run: npm install -g appcenter-cli appcenter distribute release --app "Education-App" --file app/build/outputs/apk/debug/app-debug.apk --token "b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad" --group "Collaborators"
+
+#      - run: appcenter distribute release --file app/build/outputs/apk/debug/app-debug.apk --token "b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad"
+
+#second token: 4bf9ad9c63201923311c406891e17fceb3bca23a
+
+#user token: 0a46ed2fe4c21ccbd72c8df4b69526589e4ab3f9
+#for option token: 5f8574d1ff650a93cd68969193bec3b97ec6be65
