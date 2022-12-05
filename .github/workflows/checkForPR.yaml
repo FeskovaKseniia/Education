@@ -7,13 +7,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Configure JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 11
-          # Execute unit tests
-      - name: Unit Test
-        run: ./gradlew testDebugUnitTest
+#      - name: Configure JDK
+#        uses: actions/setup-java@v1
+#        with:
+#          java-version: 11
+#          # Execute unit tests
+#      - name: Unit Test
+#        run: ./gradlew testDebugUnitTest
       - name: Build Apk
         run: ./gradlew :app:assembleDebug
       - name: Delivery to AppCenter
@@ -26,7 +26,7 @@ jobs:
         run: appcenter distribute release 
           --group Collaborators 
           --file app/build/outputs/apk/debug/app-debug.apk 
-          --app Education-App 
+          --app FeskovaKseniia/Education-App 
           --token b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad 
           --quiet
 #        run: npm install -g appcenter-cli appcenter distribute release --app "Education-App" --file app/build/outputs/apk/debug/app-debug.apk --token "b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad" --group "Collaborators"
