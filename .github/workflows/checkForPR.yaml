@@ -22,6 +22,6 @@ jobs:
           node-version: '14.x'
       - run: npm install
       - name: publish dev apk to App Center
-        run: npm install -g appcenter-cli appcenter distribute release --app Education-App --file app/build/outputs/apk/debug/app-debug.apk --token "b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad" --group "Collaborators"
+        run: npm install -g appcenter-cli appcenter distribute release --app "Education-App" --file app/build/outputs/apk/debug/app-debug.apk --token "b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad" --group "Collaborators"
 
 #      - run: appcenter distribute release --file app/build/outputs/apk/debug/app-debug.apk --token "b9b0f3dc25b91edbcd33aa27b482dbf4803a97ad"
