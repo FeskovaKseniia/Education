@@ -37,6 +37,7 @@ jobs:
         - run: |
             echo The PR was merged
     deploy:
+      needs: ifmerged
       steps:
         - uses: actions/checkout@v2
         - name: Configure JDK
