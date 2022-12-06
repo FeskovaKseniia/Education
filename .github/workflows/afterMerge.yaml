@@ -30,7 +30,7 @@ jobs:
             java-version: 11
         - name: Build
           run: ./gradlew app:assembleDebug
-    if_merged:
+    ifmerged:
       if: github.event.pull_request.merged == true
       runs-on: ubuntu-latest
       steps:
