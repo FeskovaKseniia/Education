@@ -11,19 +11,6 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-          # Execute unit tests
-      - name: Cache Gradle Wrapper
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-      - name: Cache Gradle Dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-caches-
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
       - name: Android Test Report
