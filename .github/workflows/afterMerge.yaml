@@ -30,13 +30,15 @@ jobs:
             java-version: 11
         - name: Build
           run: ./gradlew app:assembleDebug
-    if_merged:
+    ifmerged:
+      needs: build
       if: github.event.pull_request.merged == true
       runs-on: ubuntu-latest
       steps:
         - run: |
             echo The PR was merged
     deploy:
+      needs: ifmerged
       steps:
         - uses: actions/checkout@v2
         - name: Configure JDK
