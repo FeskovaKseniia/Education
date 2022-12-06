@@ -37,10 +37,6 @@ jobs:
             java-version: 11
         - name: Build
           run: ./gradlew app:assembleDebug
-  deploy:
-      needs: build
-      runs-on: ubuntu-latest
-      steps:
         - uses: actions/checkout@v2
         - name: Configure JDK
           uses: actions/setup-java@v1
