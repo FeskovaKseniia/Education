@@ -12,6 +12,18 @@ jobs:
         with:
           java-version: 11
           # Execute unit tests
+      - name: Cache Gradle Wrapper
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v2
+        with:
+         path: ~/.gradle/caches
+         key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+        restore-keys: |
+          ${{ runner.os }}-gradle-caches-
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
       - name: Android Test Report
@@ -24,30 +36,14 @@ jobs:
         with:
           name: build
           path: app/build/outputs/apk/debug/app-debug.apk
-  deploy:
-    name: Deploy
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@master
-      - name: build release
-        run: bash ./gradlew assembleDebug
+      - name: Download artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: artifact
       - name: upload artifact to Firebase App Distribution
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
-          appId: '1:1052592334714:android:9acfb57609e9ac4292d8c3'
-          token: FIREBASE_TOKEN
+          appId: ${{secrets.FIREBASE_APP_ID_ANDROID}}
+          token: ${{secrets.FIREBASE_TOKEN}}
           groups: testers
-          file: app/build/outputs/apk/debug/app-debug.apk
-#      - name: Download Artifact
-#        uses: actions/download-artifact@master
-#        with:
-#          name: build
-#          path: app/build/outputs/apk/debug/app-debug.apk
-#      - name: Deploy to Firebase
-#        uses: w9jds/firebase-action@master
-#        with:
-#          args: deploy --only hosting
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+          file: app-debug.apk
