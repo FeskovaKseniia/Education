@@ -12,23 +12,23 @@ jobs:
         with:
           java-version: 11
           # Execute unit tests
-      - name: Cache Gradle Wrapper
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/wrapper
-          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-      - name: Cache Gradle Dependencies
-        uses: actions/cache@v2
-        with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-caches-
-      - name: Unit Test
-        run: ./gradlew testDebugUnitTest
-      - name: Android Test Report
-        uses: asadmansr/android-test-report-action@v1.2.0
-        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
+#      - name: Cache Gradle Wrapper
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.gradle/wrapper
+#          key: ${{ runner.os }}-gradle-wrapper-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+#      - name: Cache Gradle Dependencies
+#        uses: actions/cache@v2
+#        with:
+#          path: ~/.gradle/caches
+#          key: ${{ runner.os }}-gradle-caches-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties') }}
+#          restore-keys: |
+#            ${{ runner.os }}-gradle-caches-
+#      - name: Unit Test
+#        run: ./gradlew testDebugUnitTest
+#      - name: Android Test Report
+#        uses: asadmansr/android-test-report-action@v1.2.0
+#        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
       - name: Build
         run: ./gradlew app:assembleDebug
       #      - name: Zip
@@ -37,8 +37,7 @@ jobs:
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{secrets.FIREBASE_SERVICE_ACCOUNT_EDUCATION_2B3AC}}
-          #          token: ${{secrets.FERIBASE_TOKEN}}
-          serviceCredentialsFileContent: education-370808-4c3d4d99b7ab.json # ${{ secrets.CREDENTIAL_FILE_CONTENT}}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT}}
           groups: testers
           file: app/build/outputs/apk/debug/app-debug.apk
 #      - name: Archive Production Artifact
