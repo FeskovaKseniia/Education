@@ -31,13 +31,13 @@ jobs:
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
       - name: Build
         run: ./gradlew app:assembleDebug
-      - name: Zip
-        run: tar -cvf app-debug.tar app/build/outputs/apk/debug/app-debug.apk
+#      - name: Zip
+#        run: tar -cvf app-debug.tar app/build/outputs/apk/debug/app-debug.apk
       - name: Archive Production Artifact
         uses: actions/upload-artifact@master
         with:
           name: build
-          path: app-debug.tar
+          path: app-debug.apk
       - name: Download artifact
         uses: actions/download-artifact@v2
         with:
@@ -48,4 +48,4 @@ jobs:
           appId: ${{secrets.FIREBASE_SERVICE_ACCOUNT_EDUCATION_2B3AC}}
           token: ${{secrets.FIREBASE_TOKEN}}
           groups: testers
-          file: app-debug.tar
+          file: app-debug.apk
