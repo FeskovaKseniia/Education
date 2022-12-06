@@ -37,7 +37,7 @@ jobs:
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{secrets.FIREBASE_SERVICE_ACCOUNT_EDUCATION_2B3AC}}
-          token: ${{ secrets.FIREBASE_TOKEN }}
+          serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT}}
           groups: testers
           file: app/build/outputs/apk/debug/app-debug.apk
 #      - name: Archive Production Artifact
