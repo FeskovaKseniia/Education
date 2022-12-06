@@ -35,7 +35,7 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - run: |
-          echo The PR was merged
+            echo The PR was merged
     deploy:
       steps:
         - uses: actions/checkout@v2
