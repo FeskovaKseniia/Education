@@ -1,9 +1,9 @@
-name: For develop
+name: Before merge
 on:
-    pull_request:
-      branches: [develop,master]
+  pull_request:
+    branches: [ develop,master ]
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -11,9 +11,19 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: 11
-              # Execute unit tests
       - name: Unit Test
         run: ./gradlew testDebugUnitTest
       - name: Android Test Report
         uses: asadmansr/android-test-report-action@v1.2.0
         if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
+  build:
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Build
+        run: ./gradlew app:assembleDebug
