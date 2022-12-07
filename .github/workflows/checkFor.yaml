@@ -1,0 +1,40 @@
+name: After merge
+on:
+  pull_request:
+    branches: [ master ]
+    types:
+      - closed
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Configure JDK
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+      - name: Unit Test
+        run: ./gradlew testReleaseUnitTest
+      - name: Android Test Report
+        uses: asadmansr/android-test-report-action@v1.2.0
+        if: ${{ always() }} # IMPORTANT: run Android Test Report regardless
+  developDeploy:
+      runs-on: ubuntu-latest
+      needs: test
+      steps:
+        - uses: actions/checkout@v2
+        - name: Configure JDK
+          uses: actions/setup-java@v1
+          with:
+            java-version: 11
+        - name: Build
+          run: ./gradlew app:assembleRelease
+        - name: Upload apk to Firebase App Distribution
+          uses: wzieba/Firebase-Distribution-Github-Action@v1
+          with:
+            appId: ${{secrets.FIREBASE_SERVICE_ACCOUNT_EDUCATION_2B3AC}}
+            serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT}}
+            groups: testers
+            file: app/build/outputs/apk/release/app-release.apk
+            releaseNotes: "Text of release apk in master"
