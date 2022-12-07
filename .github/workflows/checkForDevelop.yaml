@@ -1,7 +1,7 @@
 name: After merge
 on:
   pull_request:
-    branches: [ develop,master ]
+    branches: [ develop ]
     types:
       - closed
 
@@ -22,7 +22,6 @@ jobs:
   developDeploy:
       runs-on: ubuntu-latest
       needs: test
-      if: github.ref == 'refs/heads/develop'
       steps:
         - uses: actions/checkout@v2
         - name: Configure JDK
@@ -39,23 +38,3 @@ jobs:
             groups: testers
             file: app/build/outputs/apk/debug/app-debug.apk
             release_notes: "Text of debug apk in develop"
-  masterDeploy:
-      runs-on: ubuntu-latest
-      needs: test
-      if: github.ref == 'refs/heads/master'
-      steps:
-        - uses: actions/checkout@v2
-        - name: Configure JDK
-          uses: actions/setup-java@v1
-          with:
-            java-version: 11
-        - name: Build
-          run: ./gradlew app:assembleRelease
-        - name: Upload apk to Firebase App Distribution
-          uses: wzieba/Firebase-Distribution-Github-Action@v1
-          with:
-            appId: ${{secrets.FIREBASE_SERVICE_ACCOUNT_EDUCATION_2B3AC}}
-            serviceCredentialsFileContent: ${{ secrets.CREDENTIAL_FILE_CONTENT}}
-            groups: testers
-            file: app/build/outputs/apk/release/app-release.apk
-            release_notes: "Text of release apk in master"
