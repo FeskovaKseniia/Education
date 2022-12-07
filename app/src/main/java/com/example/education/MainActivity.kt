@@ -5,6 +5,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.add
 import androidx.fragment.app.commit
 import com.example.education.databinding.ActivityMainBinding
+import com.microsoft.appcenter.AppCenter
+import com.microsoft.appcenter.analytics.Analytics
+import com.microsoft.appcenter.crashes.Crashes
 
 
 class MainActivity : AppCompatActivity() {
@@ -19,5 +22,13 @@ class MainActivity : AppCompatActivity() {
             setReorderingAllowed(true)
             add<ListFragment>(R.id.fragment)
         }
+        AppCenter.start(
+            application, app,
+            Analytics::class.java, Crashes::class.java
+        )
+    }
+
+    companion object {
+        private const val app = "cccc7fe0-6c00-4138-8106-6df7a5652e1d"
     }
 }
