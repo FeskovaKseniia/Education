@@ -42,7 +42,7 @@ jobs:
           uses: wzieba/AppCenter-Github-Action@v1
           with:
             appName: FeskovaKseniia/Education
-            token: ${{secrets.APP_CENTER_TOKEN}}
+            token: ${{secrets.APP_CENTER}}
             group: Collaborators
             file: app/build/outputs/apk/debug/app-debug.apk
             releaseNotes: "Text of debug apk in develop"
