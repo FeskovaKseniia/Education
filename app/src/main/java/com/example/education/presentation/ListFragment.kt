@@ -1,4 +1,4 @@
-package com.example.education
+package com.example.education.presentation
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -8,8 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.education.data.Result
-import com.example.education.data.search.SearchResponse
+import com.example.education.SearchAdapter
+import com.example.education.utils.Result
+import com.example.education.data.SearchResponse
 import com.example.education.databinding.FragmentListBinding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
@@ -18,7 +19,7 @@ import retrofit2.HttpException
 class ListFragment : Fragment() {
 
     private var binding: FragmentListBinding? = null
-    private var adapter: CustomAdapter? = null
+    private var adapter: SearchAdapter? = null
     private var viewModel: ListViewModel? = null
     private var compositeDisposable = CompositeDisposable()
 
@@ -32,6 +33,7 @@ class ListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setUi()
         initView()
     }
 
@@ -40,6 +42,10 @@ class ListFragment : Fragment() {
         viewModel = defaultViewModelProviderFactory.create(ListViewModel::class.java)
     }
 
+    private fun setUi(){
+        adapter = SearchAdapter(arrayListOf())
+        binding?.rwList?.adapter = adapter
+    }
     private fun initView() = with(binding) {
         this?.let {
             button.setOnClickListener {
@@ -62,9 +68,9 @@ class ListFragment : Fragment() {
                 viewModel?.requestWithError?.observeOn(AndroidSchedulers.mainThread())?.subscribe { result ->
                     when (result) {
                         is Result.Error -> Toast.makeText(context, result.msg, Toast.LENGTH_LONG).show()
-                        is Result.Success -> Toast.makeText(
+                        is Result.Success<*> -> Toast.makeText(
                             context,
-                            result.response.coins[0].name,
+                            (result.data as SearchResponse).coins[0].name,
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -94,10 +100,9 @@ class ListFragment : Fragment() {
     }
 
     private fun setCryptosInfo(listInfo: List<SearchResponse>) = with(binding) {
-        adapter = CustomAdapter(listInfo)
         binding?.progressBar?.visibility = View.GONE
-        binding?.rwList?.adapter = adapter
         binding?.rwList?.visibility = View.VISIBLE
+        adapter?.update(listInfo)
     }
 
     @SuppressLint("SetTextI18n")

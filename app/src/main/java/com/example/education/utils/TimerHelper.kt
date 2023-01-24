@@ -1,6 +1,5 @@
-package com.example.education.data
+package com.example.education.utils
 
-import android.util.Log
 import io.reactivex.rxjava3.schedulers.Timed
 
 class TimerHelper {

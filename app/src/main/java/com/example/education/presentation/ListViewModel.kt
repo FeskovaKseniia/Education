@@ -1,9 +1,9 @@
-package com.example.education
+package com.example.education.presentation
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
-import com.example.education.data.Result
-import com.example.education.data.search.SearchResponse
+import com.example.education.utils.Result
+import com.example.education.data.SearchResponse
 import com.example.education.repo.CryptoRepository
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable

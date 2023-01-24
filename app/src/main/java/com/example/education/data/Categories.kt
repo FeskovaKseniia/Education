@@ -1,4 +1,4 @@
-package com.example.education.data.search
+package com.example.education.data
 
 import com.google.gson.annotations.SerializedName
 
