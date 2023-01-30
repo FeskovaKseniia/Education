@@ -1,6 +1,7 @@
 package com.example.education
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -14,12 +15,15 @@ import com.example.education.databinding.FragmentListBinding
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import retrofit2.HttpException
+import javax.inject.Inject
 
 class ListFragment : Fragment() {
 
     private var binding: FragmentListBinding? = null
     private var adapter: CustomAdapter? = null
-    private var viewModel: ListViewModel? = null
+
+    @Inject
+    lateinit var viewModel: ListViewModel
     private var compositeDisposable = CompositeDisposable()
 
     override fun onCreateView(
@@ -35,9 +39,9 @@ class ListFragment : Fragment() {
         initView()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = defaultViewModelProviderFactory.create(ListViewModel::class.java)
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (activity as MainActivity).appComponent.inject(this)
     }
 
     private fun initView() = with(binding) {
@@ -47,29 +51,32 @@ class ListFragment : Fragment() {
                 it.visibility = View.GONE
             }
             timerBtn.setOnClickListener {
-                viewModel?.let { viewModel ->
-                    compositeDisposable.add(viewModel.timerSubject.subscribe(
-                        { time -> timer.text = time },
-                        { error -> errorHandle(error) }
-                    ))
-                    viewModel.startTimer()
-                }
+                compositeDisposable.add(viewModel.timerSubject.subscribe(
+                    { time -> timer.text = time },
+                    { error -> errorHandle(error) }
+                ))
+                viewModel.startTimer()
             }
             unsubscribeBtn.setOnClickListener {
                 compositeDisposable.dispose()
             }
             errorBtn.setOnClickListener {
-                viewModel?.requestWithError?.observeOn(AndroidSchedulers.mainThread())?.subscribe { result ->
-                    when (result) {
-                        is Result.Error -> Toast.makeText(context, result.msg, Toast.LENGTH_LONG).show()
-                        is Result.Success -> Toast.makeText(
-                            context,
-                            result.response.coins[0].name,
-                            Toast.LENGTH_LONG
-                        ).show()
+                viewModel.requestWithError.observeOn(AndroidSchedulers.mainThread())
+                    .subscribe { result ->
+                        when (result) {
+                            is Result.Error -> Toast.makeText(
+                                context,
+                                result.msg,
+                                Toast.LENGTH_LONG
+                            ).show()
+                            is Result.Success -> Toast.makeText(
+                                context,
+                                result.response.coins[0].name,
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
-                }
-                viewModel?.startRequestWithError()
+                viewModel.startRequestWithError()
             }
         }
     }
@@ -81,11 +88,11 @@ class ListFragment : Fragment() {
     }
 
     private fun getCryptosInfo() {
-        viewModel?.getCryptoInfo()?.subscribe({ setCryptosInfo(it) }, { errorHandle(it) })
+        viewModel.getCryptoInfo().subscribe({ setCryptosInfo(it) }, { errorHandle(it) })
     }
 
     private fun mergeTwoCryptos(firstCrypto: String, secondCrypto: String) {
-        viewModel?.mergeTwoSearchResponses(firstCrypto, secondCrypto)?.subscribe({
+        viewModel.mergeTwoSearchResponses(firstCrypto, secondCrypto).subscribe({
             Log.d("ADV_MERGE", it.coins.toString())
         }, {
             errorHandle(it)

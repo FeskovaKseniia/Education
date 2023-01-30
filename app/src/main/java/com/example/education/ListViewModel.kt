@@ -12,10 +12,9 @@ import io.reactivex.rxjava3.schedulers.Schedulers
 import io.reactivex.rxjava3.schedulers.Timed
 import io.reactivex.rxjava3.subjects.PublishSubject
 import java.util.concurrent.*
+import javax.inject.Inject
 
-class ListViewModel : ViewModel() {
-
-    private val repo = CryptoRepository()
+class ListViewModel @Inject constructor(private val repo: CryptoRepository) : ViewModel() {
 
     val timerSubject: PublishSubject<String> = PublishSubject.create()
     val requestWithError: PublishSubject<Result> = PublishSubject.create()
