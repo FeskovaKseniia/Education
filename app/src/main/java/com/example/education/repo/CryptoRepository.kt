@@ -1,9 +1,9 @@
 package com.example.education.repo
 
-import com.example.education.data.ApiInterface
+import com.example.education.network.ApiInterface
 import com.example.education.data.Crypto
-import com.example.education.data.RetrofitClient
-import com.example.education.data.search.SearchResponse
+import com.example.education.network.RetrofitClient
+import com.example.education.data.SearchResponse
 import io.reactivex.rxjava3.core.Single
 import io.reactivex.rxjava3.schedulers.Schedulers
 
