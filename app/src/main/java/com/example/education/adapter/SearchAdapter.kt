@@ -3,16 +3,16 @@ package com.example.education
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.education.data.search.SearchResponse
+import com.example.education.data.SearchResponse
 import com.example.education.databinding.ItemLayoutBinding
 
-class CustomAdapter(private var list: List<SearchResponse>) :
-    RecyclerView.Adapter<CustomAdapter.ViewHolder>() {
+class SearchAdapter(private var list: ArrayList<SearchResponse>) :
+    RecyclerView.Adapter<SearchAdapter.ViewHolder>() {
 
     inner class ViewHolder(private var binding: ItemLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: SearchResponse) {
-            binding.symbol.text = item.coins[0].name
+            binding.symbol.text = item.coins[0].name + "\nfrom new request"
         }
     }
 
@@ -30,4 +30,8 @@ class CustomAdapter(private var list: List<SearchResponse>) :
         return list.size
     }
 
+    fun update(newList: List<SearchResponse>) {
+        list.clear()
+        list.addAll(newList)
+    }
 }

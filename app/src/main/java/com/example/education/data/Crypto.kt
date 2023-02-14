@@ -33,10 +33,3 @@ data class Crypto(
     @SerializedName("last_updated") var lastUpdated: String? = null
 )
 
-data class Roi(
-
-    @SerializedName("times") var times: Double? = null,
-    @SerializedName("currency") var currency: String? = null,
-    @SerializedName("percentage") var percentage: Double? = null
-
-)
