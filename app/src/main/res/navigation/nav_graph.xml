@@ -10,4 +10,10 @@
         android:name="com.example.education.presentation.FlowFragment"
         android:label="FlowFragment"
         tools:layout="@layout/fragment_flow" />
+
+    <fragment
+        android:id="@+id/listFragment"
+        android:name="com.example.education.presentation.ListFragment"
+        android:label="ListFragment"
+        tools:layout="@layout/fragment_list" />
 </navigation>
